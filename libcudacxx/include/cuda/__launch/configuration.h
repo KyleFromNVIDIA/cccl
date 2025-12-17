@@ -153,16 +153,16 @@ template <class _Tp>
 class __dyn_smem_option_base
 {
 protected:
-  using value_type = _Tp;
-  using accessor_type  = _Tp&;
+  using value_type    = _Tp;
+  using accessor_type = _Tp&;
 };
 
 template <class _Tp>
 class __dyn_smem_option_base<_Tp[]>
 {
 protected:
-  using value_type = _Tp;
-  using accessor_type  = ::cuda::std::span<_Tp>;
+  using value_type    = _Tp;
+  using accessor_type = ::cuda::std::span<_Tp>;
 
   ::cuda::std::size_t __n_;
 
@@ -175,7 +175,7 @@ template <class _Tp, ::cuda::std::size_t _Np>
 class __dyn_smem_option_base<_Tp[_Np]>
 {
 protected:
-  using value_type = _Tp;
+  using value_type    = _Tp;
   using accessor_type = ::cuda::std::span<_Tp, _Np>;
 
   static constexpr ::cuda::std::size_t __n_ = _Np;
@@ -255,10 +255,10 @@ public:
   bool __non_portable_{}; //!< \c true if the object was created with
                           //!< non_portable flag.
 
+  using typename __base_type::accessor_type; //!< The accessor type returned by the
+                                             //!< cuda::dynamic_shared_memory(config).
   using typename __base_type::value_type; //!< Value type of the dynamic
                                           //!< shared memory elements.
-  using typename __base_type::accessor_type; //!< The accessor type returned by the
-                                         //!< cuda::dynamic_shared_memory(config).
 
   static constexpr bool is_relevant_on_device        = true;
   static constexpr __detail::launch_option_kind kind = __detail::launch_option_kind::dynamic_shared_memory;
