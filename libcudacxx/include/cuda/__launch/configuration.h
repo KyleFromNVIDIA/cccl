@@ -154,7 +154,7 @@ class __dyn_smem_option_base
 {
 protected:
   using value_type = _Tp;
-  using view_type  = _Tp&;
+  using accessor_type  = _Tp&;
 };
 
 template <class _Tp>
@@ -162,7 +162,7 @@ class __dyn_smem_option_base<_Tp[]>
 {
 protected:
   using value_type = _Tp;
-  using view_type  = ::cuda::std::span<_Tp>;
+  using accessor_type  = ::cuda::std::span<_Tp>;
 
   ::cuda::std::size_t __n_;
 
@@ -176,7 +176,7 @@ class __dyn_smem_option_base<_Tp[_Np]>
 {
 protected:
   using value_type = _Tp;
-  using view_type  = ::cuda::std::span<_Tp, _Np>;
+  using accessor_type = ::cuda::std::span<_Tp, _Np>;
 
   static constexpr ::cuda::std::size_t __n_ = _Np;
 };
@@ -196,7 +196,7 @@ inline constexpr ::cuda::std::size_t __max_portable_dyn_smem_size = 48 * 1024;
  * This type can be constructed with dynamic_shared_memory helper function.
  *
  * When launch configuration contains this option, that configuration can be
- * then passed to dynamic_shared_memory to get the view_type over the
+ * then passed to dynamic_shared_memory to get the accessor_type over the
  * dynamic shared memory. It is also possible to obtain that memory through
  * the original extern __shared__ variable[] declaration.
  *
@@ -257,7 +257,7 @@ public:
 
   using typename __base_type::value_type; //!< Value type of the dynamic
                                           //!< shared memory elements.
-  using typename __base_type::view_type; //!< The view type returned by the
+  using typename __base_type::accessor_type; //!< The accessor type returned by the
                                          //!< cuda::dynamic_shared_memory(config).
 
   static constexpr bool is_relevant_on_device        = true;
@@ -280,7 +280,7 @@ public:
     }
   }
 
-  [[nodiscard]] _CCCL_API constexpr view_type __make_view(value_type* __ptr) const noexcept
+  [[nodiscard]] _CCCL_API constexpr accessor_type __make_accessor(value_type* __ptr) const noexcept
   {
     if constexpr (::cuda::std::rank_v<_Tp> == 0)
     {
@@ -288,7 +288,7 @@ public:
     }
     else
     {
-      return view_type{__ptr, __base_type::__n_};
+      return accessor_type{__ptr, __base_type::__n_};
     }
   }
 
@@ -787,7 +787,7 @@ _CCCL_DEVICE_API decltype(auto) dynamic_shared_memory(const kernel_config<_Dims,
   static_assert(!::cuda::std::is_same_v<_Opt, __detail::option_not_found>,
                 "Dynamic shared memory option not found in the kernel configuration");
   extern __shared__ unsigned char __cccl_device_dyn_smem[];
-  return __opt.__make_view(reinterpret_cast<typename _Opt::value_type*>(__cccl_device_dyn_smem));
+  return __opt.__make_accessor(reinterpret_cast<typename _Opt::value_type*>(__cccl_device_dyn_smem));
 }
 
 #  endif // _CCCL_CUDA_COMPILATION()
