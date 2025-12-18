@@ -11,10 +11,22 @@
 #ifndef _CUDA___HIERARCHY_DIMENSIONS_H
 #define _CUDA___HIERARCHY_DIMENSIONS_H
 
-#include <cuda/std/__mdspan/extents.h>
-#include <cuda/std/functional>
+#include <cuda/std/detail/__config>
 
-#include <cuda/std/__cccl/prologue.h>
+#if defined(_CCCL_IMPLICIT_SYSTEM_HEADER_GCC)
+#  pragma GCC system_header
+#elif defined(_CCCL_IMPLICIT_SYSTEM_HEADER_CLANG)
+#  pragma clang system_header
+#elif defined(_CCCL_IMPLICIT_SYSTEM_HEADER_MSVC)
+#  pragma system_header
+#endif // no system header
+
+#if _CCCL_HAS_CTK()
+
+#  include <cuda/std/__mdspan/extents.h>
+#  include <cuda/std/functional>
+
+#  include <cuda/std/__cccl/prologue.h>
 
 _CCCL_BEGIN_NAMESPACE_CUDA
 
@@ -157,6 +169,8 @@ template <class _TyTrunc, class _Index, class _Dims>
 } // namespace __detail
 _CCCL_END_NAMESPACE_CUDA
 
-#include <cuda/std/__cccl/epilogue.h>
+#  include <cuda/std/__cccl/epilogue.h>
+
+#endif // _CCCL_HAS_CTK()
 
 #endif // _CUDA___HIERARCHY_DIMENSIONS_H
