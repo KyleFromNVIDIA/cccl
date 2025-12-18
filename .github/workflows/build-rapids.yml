@@ -89,6 +89,7 @@ jobs:
           CCCL_VERSION: ${{ inputs.override_cccl_version }}
           CI: true
           CONDA_ENV_CREATE_QUIET: true
+          GH_TOKEN: ${{ github.token }}
           RAPIDS_LIBS: ${{ matrix.libs }}
           # Uncomment any of these to customize the git repo and branch for a RAPIDS lib:
           # RAPIDS_cmake_GIT_REPO: '{"upstream": "rapidsai", "tag": "main"}'
@@ -177,6 +178,7 @@ jobs:
             --env "CCCL_TAG=${CCCL_TAG}" \
             --env "CCCL_VERSION=${CCCL_VERSION}" \
             --env "DEVCONTAINER_UTILS_ENABLE_SCCACHE_DIST=true" \
+            --env "GH_TOKEN=${GH_TOKEN}" \
             --env "INFER_NUM_DEVICE_ARCHITECTURES=true" \
             --env "MAX_DEVICE_OBJ_TO_COMPILE_IN_PARALLEL=100" \
             --env "SCCACHE_BUCKET=${SCCACHE_BUCKET:-}" \
