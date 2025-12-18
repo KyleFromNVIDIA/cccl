@@ -285,7 +285,7 @@ struct __hierarchy_extents_helper
 };
 
 template <class _Tp, size_t... _Extents>
-[[nodiscard]] _CCCL_DEVICE constexpr auto __static_index_hint(const dimensions<_Tp, _Extents...>& __dims, ::dim3 __index)
+[[nodiscard]] _CCCL_DEVICE constexpr auto __static_index_hint(const dimensions<_Tp, _Extents...>&, ::dim3 __index)
 {
   using _HintedIndexT = dimensions<_Tp, (_Extents == 1 ? 0 : ::cuda::std::dynamic_extent)...>;
   return _HintedIndexT(__index.x, __index.y, __index.z);
